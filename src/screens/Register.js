@@ -1,84 +1,229 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Register({ navigation }) {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+
+const Register = () => {
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+  const [nombres, setNombres] = useState('');
+  const [apellidos, setApellidos] = useState('');
   const [cedula, setCedula] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const handleRegister = () => {
-    if (!userName.trim()) {
-      setError('El nombre de usuario es obligatorio');
-      clearMessages();
-      return;
-    }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Correo electrónico no válido');
-      clearMessages();
-      return;
-    }
-    if (phone.length < 7) {
-      setError('El teléfono debe tener al menos 7 dígitos');
-      clearMessages();
-      return;
-    }
-    if (!cedula.trim()) {
-      setError('La cédula es obligatoria');
-      clearMessages();
-      return;
-    }
-    if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
-      clearMessages();
-      return;
-    }
-
-    setError('');
-    setSuccess(`Usuario ${userName} registrado correctamente`);
-    clearMessages();
-
-    // Redirige al login después de un pequeño delay
-    setTimeout(() => navigation.goBack(), 2000);
-  };
-
-  const clearMessages = () => {
-    setTimeout(() => {
-      setError('');
-      setSuccess('');
-    }, 5000);
-  };
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Registro de Usuario</Text>
-
-      <TextInput style={styles.input} placeholder="Nombre de usuario" value={userName} onChangeText={setUserName} />
-      <TextInput style={styles.input} placeholder="Correo electrónico" value={email} onChangeText={setEmail} keyboardType="email-address" />
-      <TextInput style={styles.input} placeholder="Teléfono" value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
-      <TextInput style={styles.input} placeholder="Cédula" value={cedula} onChangeText={setCedula} />
-      <TextInput style={styles.input} placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
-
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      {success ? <Text style={styles.success}>{success}</Text> : null}
-
-      <Button title="Registrar" onPress={handleRegister} />
-
-      <Text style={styles.link} onPress={() => navigation.goBack()}>
-        ¿Ya tienes cuenta? Inicia sesión
+    <LinearGradient
+      colors={["#7EC8E3", "#43C6AC"]}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
+      style={styles.container}
+    >
+      {/* Icono eliminado */}
+      <Text style={styles.title}>Apprueba</Text>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity style={styles.buttonInactive} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.buttonTextInactive}>Iniciar Sesión</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonActive}>
+          <Text style={styles.buttonTextActive}>Crear Cuenta</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.form}>
+        <View style={styles.row}>
+          <View style={styles.inputGroupHalf}>
+            <Text style={styles.label}>Nombres</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Tu nombre"
+              value={nombres}
+              onChangeText={setNombres}
+            />
+          </View>
+          <View style={styles.inputGroupHalf}>
+            <Text style={styles.label}>Apellidos</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Tus apellidos"
+              value={apellidos}
+              onChangeText={setApellidos}
+            />
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.inputGroupHalf}>
+            <Text style={styles.label}>Número de cédula</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="12345678"
+              value={cedula}
+              onChangeText={setCedula}
+              keyboardType="numeric"
+            />
+          </View>
+          <View style={styles.inputGroupHalf}>
+            <Text style={styles.label}>Teléfono</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="300 000 0000"
+              value={telefono}
+              onChangeText={setTelefono}
+              keyboardType="phone-pad"
+            />
+          </View>
+        </View>
+        <Text style={styles.label}>Correo electrónico</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="tucorreo@ejemplo.com"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+        <Text style={styles.label}>Contraseña</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Introduce tu contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <Text style={styles.label}>Confirmar contraseña</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Vuelve a escribir tu contraseña"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.registerButton}>
+          <Text style={styles.registerButtonText}>Crear Cuenta</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.privacyText}>
+        Al continuar aceptas los Términos y la Política de Privacidad.
       </Text>
-    </ScrollView>
+    </LinearGradient>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10, marginBottom: 15 },
-  link: { color: 'blue', marginTop: 15, textAlign: 'center' },
-  error: { color: 'red', marginBottom: 15, textAlign: 'center' },
-  success: { color: 'green', marginBottom: 15, textAlign: 'center' },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  iconBox: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    justifyContent: 'center',
+  },
+  buttonActive: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    marginLeft: 10,
+  },
+  buttonInactive: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  buttonTextActive: {
+    color: '#43C6AC',
+    fontWeight: 'bold',
+  },
+  buttonTextInactive: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  form: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 20,
+    width: '100%',
+    maxWidth: 400,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  inputGroupHalf: {
+    flex: 1,
+    marginRight: 10,
+    marginBottom: 15,
+  },
+  label: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#43C6AC',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    color: '#43C6AC',
+    backgroundColor: '#F7F7F7',
+  },
+  registerButton: {
+    backgroundColor: '#43C6AC',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  registerButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  privacyText: {
+    color: '#fff',
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 10,
+  },
 });
+
+export default Register;
