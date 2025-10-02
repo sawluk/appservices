@@ -17,6 +17,11 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  // Redirige siempre a MainTabs al presionar el botón "Crear Cuenta"
+  const handleRegister = () => {
+    navigation.replace('MainTabs');
+  };
+
   return (
     <LinearGradient
       colors={["#7EC8E3", "#43C6AC"]}
@@ -101,7 +106,7 @@ const Register = () => {
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
-        <TouchableOpacity style={styles.registerButton}>
+        <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
           <Text style={styles.registerButtonText}>Crear Cuenta</Text>
         </TouchableOpacity>
       </View>

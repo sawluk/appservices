@@ -10,6 +10,11 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Redirige siempre a MainTabs al presionar el botón
+  const handleLogin = () => {
+    navigation.replace('MainTabs');
+  };
+
   return (
     <LinearGradient
       colors={["#7EC8E3", "#43C6AC"]}
@@ -46,7 +51,7 @@ const Login = () => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity>
@@ -56,7 +61,7 @@ const Login = () => {
       <Text style={styles.privacyText}>
         Al continuar aceptas los Términos y la Política de Privacidad.
       </Text>
-  </LinearGradient>
+    </LinearGradient>
   );
 };
 
